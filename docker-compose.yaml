@@ -2,15 +2,21 @@ services:
   app:
     container_name: app
     build: .
+    restart: unless-stopped
     ports:
       - 8080:8080
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    volumes:
+      - ./src/Web/appsettings.json:/app/src/Web/appsettings.json
     depends_on:
       database:
         condition: service_healthy
-            
+  
   database:
     container_name: database
     image: postgres:17.4-alpine3.21
+    restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
